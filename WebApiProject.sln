@@ -4,8 +4,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.12.35527.113 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiLayer", "ApiLayer\ApiLayer.csproj", "{28FAC767-ABC4-4A08-B22D-117D4DCE73E1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A4BAFAED-DFD2-44F4-93D1-8DDB7911CC06} = {A4BAFAED-DFD2-44F4-93D1-8DDB7911CC06}
+		{DE4DDB81-5F88-4D06-B2AD-48801F530D8F} = {DE4DDB81-5F88-4D06-B2AD-48801F530D8F}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{DE4DDB81-5F88-4D06-B2AD-48801F530D8F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A4BAFAED-DFD2-44F4-93D1-8DDB7911CC06} = {A4BAFAED-DFD2-44F4-93D1-8DDB7911CC06}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{A4BAFAED-DFD2-44F4-93D1-8DDB7911CC06}"
 EndProject

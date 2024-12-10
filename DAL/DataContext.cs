@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using DAL.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL
@@ -9,5 +10,8 @@ namespace DAL
         {
             
         }
+
+        public DbSet<ClientEntity> ClientEntities { get; set; }
+        public DbSet<LocationEntity> LocationEntities { get; set; }
     }
 }
