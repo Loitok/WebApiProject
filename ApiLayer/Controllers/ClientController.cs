@@ -1,4 +1,5 @@
-﻿using BLL.Services;
+﻿using BLL.Seeders;
+using BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiLayer.Controllers
@@ -8,10 +9,12 @@ namespace ApiLayer.Controllers
     public class ClientController : ControllerBase
     {
         private readonly IClientService _clientService;
+        private readonly IDataSeeder _dataSeeder;
 
-        public ClientController(IClientService clientService)
+        public ClientController(IClientService clientService, IDataSeeder dataSeeder)
         {
             _clientService = clientService;
+            _dataSeeder = dataSeeder;
         }
 
         [HttpGet]
@@ -28,6 +31,14 @@ namespace ApiLayer.Controllers
         {
             var result = await _clientService.GetAllLocations();
             return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("generate-locations")]
+        public async Task<IActionResult> GenerateLocations(int number)
+        {
+            await _dataSeeder.SeedLocations(number);
+            return Ok($"{number} new entities!");
         }
     }
 }

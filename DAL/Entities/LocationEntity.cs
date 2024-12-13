@@ -1,5 +1,9 @@
-﻿namespace DAL.Entities
+﻿using DAL.Configurations;
+using Microsoft.EntityFrameworkCore;
+
+namespace DAL.Entities
 {
+    [EntityTypeConfiguration(typeof(LocationConfiguration))]
     public class LocationEntity : BaseEntity
     {
         public string BusinessId { get; set; }

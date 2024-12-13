@@ -1,5 +1,9 @@
-﻿namespace DAL.Entities
+﻿using DAL.Configurations;
+using Microsoft.EntityFrameworkCore;
+
+namespace DAL.Entities
 {
+    [EntityTypeConfiguration(typeof(ClientConfiguration))]
     public class ClientEntity : BaseEntity
     {
         public string Reference { get; set; }

@@ -1,3 +1,5 @@
+using ApiLayer.Middlewares;
+using BLL.Seeders;
 using BLL.Services;
 using DAL;
 using DAL.Repository;
@@ -35,6 +37,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IDataSeeder, DataSeeder>();
 
 builder.Services.AddAuthorization();
 
@@ -53,6 +56,8 @@ if (app.Environment.IsDevelopment())
 app.MapIdentityApi<IdentityUser>();
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<CustomMiddleware>();
 
 app.UseAuthorization();
 
