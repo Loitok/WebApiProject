@@ -1,6 +1,5 @@
 ﻿using DAL;
 using DAL.Entities;
-using System;
 
 namespace BLL.Seeders
 {
@@ -16,7 +15,7 @@ namespace BLL.Seeders
         public async Task SeedLocations(int count)
         {
             var random = new Random();
-            var locations = new List<LocationEntity>(); 
+            var locations = new List<LocationEntity>();
             var currentYear = DateTime.Now.Year;
 
             for (int i = 0; i < count; i++)

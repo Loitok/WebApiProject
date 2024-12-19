@@ -1,4 +1,5 @@
-using ApiLayer.Middlewares;
+using AutoMapper;
+using BLL.Profiles;
 using BLL.Seeders;
 using BLL.Services;
 using DAL;
@@ -35,6 +36,14 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
     b => b.MigrationsAssembly("DAL")));
 
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingProfile());
+});
+
+var mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IDataSeeder, DataSeeder>();
@@ -57,7 +66,7 @@ app.MapIdentityApi<IdentityUser>();
 
 app.UseHttpsRedirection();
 
-app.UseMiddleware<CustomMiddleware>();
+//app.UseMiddleware<CustomMiddleware>();
 
 app.UseAuthorization();
 

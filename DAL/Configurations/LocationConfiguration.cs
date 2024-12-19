@@ -12,6 +12,8 @@ namespace DAL.Configurations
 
             builder.Property(x => x.ClientId)
                 .IsRequired();
+
+            builder.HasIndex(x => x.Name);
         }
     }
 }
