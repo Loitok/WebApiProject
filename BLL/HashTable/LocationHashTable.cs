@@ -36,7 +36,6 @@ namespace BLL.HashTable
             int index = GetBucketIndex(key);
             HashNode node = _buckets[index];
 
-            // Якщо в кошику вже є елементи, додаємо в ланцюжок
             while (node != null)
             {
                 if (node.Key == key)
@@ -44,7 +43,6 @@ namespace BLL.HashTable
                 node = node.Next;
             }
 
-            // Додаємо новий елемент
             HashNode newNode = new HashNode(key, value)
             {
                 Next = _buckets[index]
@@ -79,11 +77,11 @@ namespace BLL.HashTable
                 {
                     if (prev == null)
                     {
-                        _buckets[index] = node.Next; // Видаляємо перший елемент
+                        _buckets[index] = node.Next;
                     }
                     else
                     {
-                        prev.Next = node.Next; // Обходимо видалений вузол
+                        prev.Next = node.Next;
                     }
                     return true;
                 }
