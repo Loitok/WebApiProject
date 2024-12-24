@@ -1,5 +1,5 @@
+using ApiLayer.Profiles;
 using AutoMapper;
-using BLL.Profiles;
 using BLL.Seeders;
 using BLL.Services;
 using DAL;

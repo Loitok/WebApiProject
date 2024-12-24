@@ -1,12 +1,15 @@
-﻿using BLL.DTOs;
-using BLL.DTOs.Result;
+﻿using BLL.Models;
+using BLL.Models.Result;
+using BLL.Models.Result.Generics;
+using Microsoft.AspNetCore.Http;
 
 namespace BLL.Services
 {
     public interface IClientService
     {
-        Task<IResult<IReadOnlyCollection<ClientDTO>>> GetAllClients();
-        Task<IResult<IReadOnlyCollection<LocationDTO>>> GetLocations(int pageNumber, int pageSize);
-        Task<IResult<byte[]>> GetExportedLocations(int pageNumber, int pageSize);
+        Task<IResult<IReadOnlyCollection<ClientModel>>> GetAllClients();
+        Task<IResult<IReadOnlyCollection<LocationModel>>> GetLocations();
+        Task<IResult<byte[]>> GetExportedLocations();
+        Task<IResult> ImportLocations(IFormFile file);
     }
 }

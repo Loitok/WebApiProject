@@ -1,4 +1,6 @@
-﻿using BLL.Seeders;
+﻿using ApiLayer.DTOs;
+using AutoMapper;
+using BLL.Seeders;
 using BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,52 +12,68 @@ namespace ApiLayer.Controllers
     {
         private readonly IClientService _clientService;
         private readonly IDataSeeder _dataSeeder;
+        private readonly IMapper _mapper;
 
-        public ClientController(IClientService clientService, IDataSeeder dataSeeder)
+        public ClientController(IClientService clientService, IDataSeeder dataSeeder, IMapper mapper)
         {
             _clientService = clientService;
             _dataSeeder = dataSeeder;
+            _mapper = mapper;
         }
 
         [HttpGet]
         [Route("clients")]
         public async Task<IActionResult> GetClients()
         {
-            var result = await _clientService.GetAllClients();
+            var clientsResult = await _clientService.GetAllClients();
 
-            if (!result.Success)
-            {
-                return BadRequest(result.ErrorMessage.Message);
-            }
+            if (!clientsResult.Success)
+                return BadRequest(clientsResult.ErrorMessage.Message);
+
+            var result = _mapper.Map<List<ClientDTO>>(clientsResult.Data);
 
             return Ok(result);
         }
 
         [HttpGet]
         [Route("locations")]
-        public async Task<IActionResult> GetLocations(int pageNumber, int pageSize)
+        public async Task<IActionResult> GetLocations()
         {
-            var result = await _clientService.GetLocations(pageNumber, pageSize);
-            
-            if (!result.Success)
-            {
-                return BadRequest(result.ErrorMessage.Message);
-            }
+            var locationsResult = await _clientService.GetLocations();
+
+            if (!locationsResult.Success)
+                return BadRequest(locationsResult.ErrorMessage.Message);
+
+            var result = _mapper.Map<List<LocationDTO>>(locationsResult.Data);
 
             return Ok(result);
         }
 
         [HttpGet]
         [Route("export-locations")]
-        public async Task<IActionResult> GetExportedLocation(int pageNumber, int pageSize)
+        public async Task<IActionResult> GetExportedLocation()
         {
-            var result = await _clientService.GetExportedLocations(pageNumber, pageSize);
+            var result = await _clientService.GetExportedLocations();
 
-            if (!result.Success) {
+            if (!result.Success)
                 return BadRequest(result.ErrorMessage.Message);
-            }
 
             return File(result.Data, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Locations_Page.xlsx");
+        }
+
+        [HttpPost]
+        [Route("import-locations")]
+        public async Task<IActionResult> ImportLocations(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            var result = await _clientService.ImportLocations(file);
+
+            if (!result.Success)
+                return BadRequest(result.ErrorMessage.Message);
+
+            return Ok(result.Success);
         }
 
         [HttpPost]

@@ -1,10 +1,10 @@
-﻿namespace BLL.DTOs
+﻿namespace BLL.Models
 {
-    public class ClientDTO : BaseDTO
+    public class ClientModel : BaseModel
     {
         public string Reference { get; set; }
         public string Name { get; set; }
         public string Status { get; set; }
-        public ICollection<LocationDTO> Locations { get; set; }
+        public ICollection<LocationModel> Locations { get; set; }
     }
 }

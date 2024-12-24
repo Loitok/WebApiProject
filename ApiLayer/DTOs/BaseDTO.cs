@@ -1,4 +1,4 @@
-﻿namespace BLL.DTOs
+﻿namespace ApiLayer.DTOs
 {
     public class BaseDTO
     {

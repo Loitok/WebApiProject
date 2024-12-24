@@ -1,4 +1,4 @@
-﻿namespace BLL.DTOs.Result
+﻿namespace BLL.Models.Result
 {
     public class ResponseMessage : IResponseMessage
     {

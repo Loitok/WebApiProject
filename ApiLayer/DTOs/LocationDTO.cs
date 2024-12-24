@@ -1,4 +1,4 @@
-﻿namespace BLL.DTOs
+﻿namespace ApiLayer.DTOs
 {
     public class LocationDTO : BaseDTO
     {
@@ -20,7 +20,5 @@
         public string Status { get; set; }
         public string Notes { get; set; }
         public bool IsArchived { get; set; }
-        public int ClientId { get; set; }
-        public ClientDTO Client { get; set; }
     }
 }

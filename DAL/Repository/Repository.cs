@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DAL.Repository
 {
@@ -19,17 +20,44 @@ namespace DAL.Repository
         public async Task<IEnumerable<T>> GetAllAsync() =>
             await _dbSet.ToListAsync();
 
-        public async Task<IEnumerable<T>> GetAllWithIncludeAsync(
-        Func<IQueryable<T>, IQueryable<T>>? include = null)
+        public async Task<IEnumerable<T>> GetAllWithQueryAsync(
+            Func<IQueryable<T>, IQueryable<T>>? query = null)
         {
-            IQueryable<T> query = _dbSet;
+            IQueryable<T> baseQuery = _dbSet;
 
-            if (include != null)
+            if (query != null)
             {
-                query = include(query);
+                baseQuery = query(baseQuery);
             }
 
-            return await query.ToListAsync();
+            return await baseQuery.ToListAsync();
+        }
+
+        public async Task<T?> GetByFirstOrDefaultAsync(Func<IQueryable<T>, IQueryable<T>>? query = null)
+        {
+            IQueryable<T> baseQuery = _dbSet;
+
+            if (query != null)
+            {
+                baseQuery = query(baseQuery);
+            }
+
+            return await baseQuery.FirstOrDefaultAsync();
+        }
+
+        public async Task<List<TResult>> GetSelectedAsync<TResult>(Expression<Func<T, TResult>> selector)
+        {
+            return await _dbSet.Select(selector).ToListAsync();
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        public void UpdateRange(IEnumerable<T> entities)
+        {
+            _context.Set<T>().UpdateRange(entities);
         }
     }
 }
