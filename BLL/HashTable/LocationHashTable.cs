@@ -2,108 +2,97 @@
 
 namespace BLL.HashTable
 {
-    public class LocationHashTable
+    public class HashUsage
     {
-        private class HashNode
+        public void Usage()
         {
-            public int Key { get; set; }
-            public LocationModel Value { get; set; }
-            public HashNode Next { get; set; }
+            LocationModel model1 = new LocationModel { Id = 1, Address1 = "Address1", City = "City1" };
+            LocationModel model2 = new LocationModel { Id = 2, Address1 = "Address2", City = "City2" };
+            LocationModel model3 = new LocationModel { Id = 3, Address1 = "Address3", City = "City3" };
 
-            public HashNode(int key, LocationModel value)
-            {
-                Key = key;
-                Value = value;
-                Next = null;
-            }
+            HashTable hashTable = new HashTable();
+
+            hashTable.Add(model1.Id, model1);
+            hashTable.Add(model2.Id, model2);
+            hashTable.Add(model3.Id, model3);
+
+            var getModel1 = hashTable.Get(model1.Id);
+
+            hashTable.Remove(model1.Id);
+            hashTable.Remove(model2.Id);
+            hashTable.Remove(model3.Id);
+        }
+    }
+
+    public class HashTable
+    {
+        private const int Size = 100;
+        private LinkedList<KeyValuePair<int, LocationModel>>[] buckets;
+
+        public HashTable()
+        {
+            buckets = new LinkedList<KeyValuePair<int, LocationModel>>[Size];
         }
 
-        private readonly HashNode[] _buckets;
-        private const int DefaultCapacity = 16;
-
-        public LocationHashTable(int capacity = DefaultCapacity)
+        private int GetHash(int key)
         {
-            _buckets = new HashNode[capacity];
-        }
-
-        private int GetBucketIndex(int key)
-        {
-            return key.GetHashCode() % _buckets.Length;
+            return key.GetHashCode() % Size;
         }
 
         public void Add(int key, LocationModel value)
         {
-            int index = GetBucketIndex(key);
-            HashNode node = _buckets[index];
+            var index = GetHash(key);
 
-            while (node != null)
+            if (buckets[index] == null)
             {
-                if (node.Key == key)
-                    throw new ArgumentException($"Key {key} already exists.");
-                node = node.Next;
+                buckets[index] = new LinkedList<KeyValuePair<int, LocationModel>>();
             }
 
-            HashNode newNode = new HashNode(key, value)
+            foreach (var pair in buckets[index])
             {
-                Next = _buckets[index]
-            };
-            _buckets[index] = newNode;
+                if (pair.Key.Equals(key))
+                {
+                    throw new ArgumentException("Key already exists");
+                }
+            }
+
+            buckets[index].AddLast(new KeyValuePair<int, LocationModel>(key, value));
         }
 
         public LocationModel Get(int key)
         {
-            int index = GetBucketIndex(key);
-            HashNode node = _buckets[index];
+            int index = GetHash(key);
 
-            while (node != null)
+            if (buckets[index] != null)
             {
-                if (node.Key == key)
-                    return node.Value;
-                node = node.Next;
+                foreach (var pair in buckets[index])
+                {
+                    if (pair.Key.Equals(key))
+                    {
+                        return pair.Value;
+                    }
+                }
             }
-
-            throw new KeyNotFoundException($"Key {key} not found.");
+            throw new KeyNotFoundException("Key not found");
         }
 
         public bool Remove(int key)
         {
-            int index = GetBucketIndex(key);
-            HashNode node = _buckets[index];
-            HashNode prev = null;
+            int index = GetHash(key);
 
-            while (node != null)
+            if (buckets[index] != null)
             {
-                if (node.Key == key)
+                var current = buckets[index].First;
+                while (current != null)
                 {
-                    if (prev == null)
+                    if (current.Value.Key.Equals(key))
                     {
-                        _buckets[index] = node.Next;
+                        buckets[index].Remove(current);
+                        return true;
                     }
-                    else
-                    {
-                        prev.Next = node.Next;
-                    }
-                    return true;
+                    current = current.Next;
                 }
-                prev = node;
-                node = node.Next;
             }
-
-            return false;
-        }
-
-        public bool ContainsKey(int key)
-        {
-            int index = GetBucketIndex(key);
-            HashNode node = _buckets[index];
-
-            while (node != null)
-            {
-                if (node.Key == key)
-                    return true;
-                node = node.Next;
-            }
-
             return false;
         }
     }
